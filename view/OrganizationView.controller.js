@@ -17,10 +17,20 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         // create a simple button with some text and a tooltip only
        this._drawButton();
 	},
-	_drawTable:function(divIndex,obj){
+	_drawTable:function(divIndex,divIndex2,obj){
         //Create an instance of the table control
-        var standardListItem = new sap.m.StandardListItem({title:obj.children.name});
-        standardListItem.placeAt("com_content_table_"+divIndex);
+        console.log(divIndex2+"+++"+obj);
+        if(divIndex2!=9999){
+            var standardListItem = new sap.m.StandardListItem({title:obj.name});
+            standardListItem.placeAt("com_content_table_"+divIndex+"_"+divIndex2);
+        }else{
+            var standardListItem = new sap.m.StandardListItem({title:obj.name});
+            standardListItem.placeAt("com_content_table_"+divIndex);
+        }
+        
+        // sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
+        var children = obj.list;
+
 	},
 	_drawDatePickers:function(){
 		// create DatePickers and bind to model
@@ -114,19 +124,11 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         	    var dateNew = year+month+day;
         	    var jiBie = sap.ui.getCore().byId("ComboBox1").getSelectedKey();
         	    var bianHao = sap.ui.getCore().byId("input0").getValue();
-        	    var html = "";
+        	    
                 var depArray = [
-                	{deptName:"总经理工作部",num:"1",children:{name:"总经理工作部"}},
-                	{deptName:"人力资源部",num:"2",children:{name:"人力资源部"}},
-                // 	{deptName:"物资供应部",num:"3"},
-                // 	{deptName:"财务部",num:"4"},
-                // 	{deptName:"计划合同部",num:"5"},
-                // 	{deptName:"安质部",num:"6"},
-                // 	{deptName:"物资供应部",num:"3"},
-                // 	{deptName:"财务部",num:"4"},
-                // 	{deptName:"计划合同部",num:"5"},
-                // 	{deptName:"安质部",num:"6"},
-                	{deptName:"燃料部",num:"99",children:{name:"燃料部"}}
+                	{name:"总经理工作部",list:[{name:"二级部门"},{name:"三级部门"}]},
+                	{name:"人力资源部",list:[{name:"二级部门"},{name:"三级部门"}]},
+                	{name:"燃料部",list:[{name:"二级部门"},{name:"三级部门"}]}
                 ];
                 var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>公司领导</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
                 $('#htmlstrtpart').html(htmls);                
@@ -137,24 +139,83 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                     var sty = num+"%";
                     document.getElementById('strt_block_table').style.width=sty;
                 }    
-                for(var i=0;i<depArray.length;i++){
-                    if(i==0){
-                        html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div></div>';
-                    }else if(i==depArray.length-1){
-                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div></div>';
-                    }else{
-                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div></div>';
-                    }
-                }
-                $('#strt_block_table').html(html);
-                for(var j=0;j<depArray.length;j++){
-                    sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawTable(j,depArray[j]);
-                }
-        	    
+                sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
+
         	}
         });
         // attach it to some element in the page
         oButton1.placeAt("queryButton");
+	},
+	_drawDiv:function(depArray,div){
+	    var html = "";
+	        for(var i=0;i<depArray.length;i++){
+                if(i==0){
+                        var list = depArray[i].list;
+                        html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div>';
+                        if(list!=undefined){
+                            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
+                            for(var k=0;k<list.length;k++){
+                                if(k==0){
+                                html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }else if(k==list.length-1){
+                                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }else{
+                                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }
+                            }
+                            html+='</div>';
+                        }
+                        
+                }else if(i==depArray.length-1){
+                        var list = depArray[i].list;
+                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div>';
+                        if(list!=undefined){
+                            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
+                            for(var k=0;k<list.length;k++){
+                                if(k==0){
+                                html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }else if(k==list.length-1){
+                                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }else{
+                                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }
+                            }
+                            html+='</div>';
+                        }
+                    
+                }else{
+                        // console.log("dddd");
+                        var list = depArray[i].list;
+                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div>';
+                        // console.log("dddd");
+                        if(list!=undefined){
+                            
+                            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
+                            for(var k=0;k<list.length;k++){
+                                if(k==0){
+                                html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }else if(k==list.length-1){
+                                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }else{
+                                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                                }
+                            }
+                            html+='</div>';
+                        }
+                    
+                }
+                html+='</div>';
+            }
+            console.log(html);
+        $(div).html(html);
+        for(var j=0;j<depArray.length;j++){
+                this._drawTable(j,9999,depArray[j]);
+                if(depArray[j].list!=undefined){
+                    for(var l=0;l<depArray[j].list.length;l++){
+                        this._drawTable(j,l,depArray[j].list[l]);
+                    }
+                }
+        }
 	}
 
 });
