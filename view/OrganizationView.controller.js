@@ -8,7 +8,22 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
 		});
 	},
 	_query:function(){
-	    // create DatePickers and bind to model
+	    //create date
+	    this._drawDatePickers();
+        //create input
+        this._drawTree();
+        // Create a ComboBox
+        this._drawComboBox();
+        // create a simple button with some text and a tooltip only
+       this._drawButton();
+	},
+	_drawTable:function(divIndex,obj){
+        //Create an instance of the table control
+        var standardListItem = new sap.m.StandardListItem({title:obj.children.name});
+        standardListItem.placeAt("com_content_table_"+divIndex);
+	},
+	_drawDatePickers:function(){
+		// create DatePickers and bind to model
 	    var oModel = new sap.ui.model.json.JSONModel();
         oModel.setData({
         	dateValue: new Date()
@@ -20,9 +35,10 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                 path: "/dateValue",
         		type: new sap.ui.model.type.Date({pattern: "yyyy-MM-dd", strictParsing: true})
         	}
-        })).placeAt("dataForm");
-        // Create a ComboBox
-        var oComboBox1 = new sap.ui.commons.ComboBox("ComboBox1");
+        })).placeAt("dataForm");    
+	},
+	_drawComboBox:function(){
+	    var oComboBox1 = new sap.ui.commons.ComboBox("ComboBox1");
         oComboBox1.setEditable(true);
         oComboBox1.setValue("二级");
         oComboBox1.setWidth("150px");
@@ -34,26 +50,83 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         oComboBox1.addItem(oItem);
         // Attach the ComboBox to the page
         oComboBox1.placeAt("shuChuCengJiForm");
-        // create a simple button with some text and a tooltip only
-        var oButton1 = new sap.ui.commons.Button({
+	},
+	_drawTree:function(){
+	    // create a simple Input field
+	    var oInput0 = new sap.ui.commons.TextField('input0',{width:"80px",enabled:false});
+        oInput0.placeAt("textFieldForm0");
+        var oInput1 = new sap.ui.commons.TextField('input1',{enabled:false});
+        oInput1.placeAt("textFieldForm");
+	    //Create a MenuButton Control
+        var oMenuButton = new sap.ui.commons.MenuButton("menuButton",{text: "选择组织单元"}); 
+        //Create the menu
+        var oMenu1 = new sap.ui.commons.Menu();
+        //Create the items and add them to the menu
+        var oMenuItem1 = new sap.ui.commons.MenuItem({text: "New",tooltip: "1001",select:this.handleMenuItemPress}); //Icon must be not larger than 16x16 px
+        oMenu1.addItem(oMenuItem1);
+        var oMenuItem2 = new sap.ui.commons.MenuItem({text: "Delete",tooltip: "1002",select:this.handleMenuItemPress});
+        oMenu1.addItem(oMenuItem2);
+        var oMenuItem3 = new sap.ui.commons.MenuItem({text: "Properties",tooltip: "1003",select:this.handleMenuItemPress});
+        oMenu1.addItem(oMenuItem3);
+        //Create a sub menu for item 1
+        var oMenu2 = new sap.ui.commons.Menu();
+        oMenuItem1.setSubmenu(oMenu2);
+        //Create the items and add them to the sub menu
+        var oMenuItem4 = new sap.ui.commons.MenuItem({text: "TXT",tooltip: "1004"});
+        oMenu2.addItem(oMenuItem4);
+        var oMenuItem5 = new sap.ui.commons.MenuItem({text: "RAR",tooltip: "1005"});
+        oMenu2.addItem(oMenuItem5);
+        
+        //Create a sub menu for item 1
+        var oMenu3 = new sap.ui.commons.Menu();
+        oMenuItem2.setSubmenu(oMenu3);
+        //Create the items and add them to the sub menu
+        var oMenuItem6 = new sap.ui.commons.MenuItem({text: "ABC"});
+        oMenu3.addItem(oMenuItem6);
+        var oMenuItem7 = new sap.ui.commons.MenuItem({text: "DEF"});
+        oMenu3.addItem(oMenuItem7);
+        
+        
+        //Attach the Menu to the MenuButton
+        oMenuButton.setMenu(oMenu1);
+        //Attach an event to raise an alert when an item is selected.
+        // oMenuButton.attachItemSelected(function (oEvent){
+        //     sap.ui.getCore().byId("input1").setValue(oEvent.getParameter("item").getText() );
+        // });
+        
+        //Attach the MenuButton to the page
+        oMenuButton.placeAt("zuZhiDanYanBianMaForm");
+	},
+	handleMenuItemPress:function(oEvent){
+	     sap.ui.getCore().byId("input0").setValue(oEvent.getParameter("item").getTooltip());
+	     sap.ui.getCore().byId("input1").setValue(oEvent.getParameter("item").getText() );
+	},
+	_drawButton:function(){
+	     var oButton1 = new sap.ui.commons.Button({
         	text : "查询",
         	tooltip : "查询",
-        	press : function(oEvent) {
+        	width:"100px",
+        	press : function() {
         	    var dateValue = sap.ui.getCore().byId("dateQuery").getValue();
         	    var year = dateValue.substring(0,4);
         	    var month = dateValue.substring(5,7);
         	    var day = dateValue.substring(8,10);
         	    var dateNew = year+month+day;
         	    var jiBie = sap.ui.getCore().byId("ComboBox1").getSelectedKey();
+        	    var bianHao = sap.ui.getCore().byId("input0").getValue();
         	    var html = "";
                 var depArray = [
-                	{deptName:"总经理工作部",num:"1"},
-                	{deptName:"人力资源部",num:"2"},
-                	{deptName:"物资供应部",num:"3"},
-                	{deptName:"财务部",num:"4"},
-                	{deptName:"计划合同部",num:"5"},
-                	{deptName:"安质部",num:"6"},
-                	{deptName:"燃料部",num:"99"}
+                	{deptName:"总经理工作部",num:"1",children:{name:"总经理工作部"}},
+                	{deptName:"人力资源部",num:"2",children:{name:"人力资源部"}},
+                // 	{deptName:"物资供应部",num:"3"},
+                // 	{deptName:"财务部",num:"4"},
+                // 	{deptName:"计划合同部",num:"5"},
+                // 	{deptName:"安质部",num:"6"},
+                // 	{deptName:"物资供应部",num:"3"},
+                // 	{deptName:"财务部",num:"4"},
+                // 	{deptName:"计划合同部",num:"5"},
+                // 	{deptName:"安质部",num:"6"},
+                	{deptName:"燃料部",num:"99",children:{name:"燃料部"}}
                 ];
                 var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>公司领导</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
                 $('#htmlstrtpart').html(htmls);                
@@ -65,7 +138,6 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                     document.getElementById('strt_block_table').style.width=sty;
                 }    
                 for(var i=0;i<depArray.length;i++){
-                    
                     if(i==0){
                         html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div></div>';
                     }else if(i==depArray.length-1){
@@ -83,97 +155,6 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         });
         // attach it to some element in the page
         oButton1.placeAt("queryButton");
-        
-// 		//create the Tree control
-// 		var oTree = new sap.ui.commons.Tree("tree");
-// 		oTree.setTitle("Explorer");
-// 		oTree.setWidth("100%");
-// 		oTree.setHeight("auto");
-// 		oTree.setShowHeaderIcons(true);
-// 		oTree.setShowHorizontalScrollbar(false);
-
-// 		//create Tree Nodes
-// 		var oNode1 = new sap.ui.commons.TreeNode("node1", {text:"Computer", icon:"images/system.gif", expanded: true});
-// 		var oNode2 = new sap.ui.commons.TreeNode("node2", {text:"OSDisk (C:)", icon:"images/disk.gif", expanded: true});
-// 		var oNode3 = new sap.ui.commons.TreeNode("node3", {text:"Program Files", icon:"images/folder.gif"});
-// 		var oNode4 = new sap.ui.commons.TreeNode("node4", {text:"Windows", icon:"images/folder.gif"});
-// 		var oNode5 = new sap.ui.commons.TreeNode("node5", {text:"Mass Storage (USB)", icon:"images/disk.gif"});
-// 		var oNode6 = new sap.ui.commons.TreeNode("node6", {text:"Network", icon:"images/network.gif"});
-
-// 		oNode1.addNode(oNode2);
-// 		oNode1.addNode(oNode5);
-
-// 		oNode2.addNode(oNode3);
-// 		oNode2.addNode(oNode4);
-
-// 		//add Tree Node root to the Tree
-// 		oTree.addNode(oNode1);
-// 		oTree.addNode(oNode6);
-
-// 		oTree.placeAt("zuZhiDanYanBianMaForm");
-	},
-	_drawTable:function(divIndex,obj){
-	    var aData = [
-        	{lastName: "Dente", num1: "23", num2: "15"},
-        	{lastName: "Friese", num1: "2", num2: "23"},
-        	{lastName: "Mann", num1: "43", num2: "4"},
-        	{lastName: "Schutt", num1: "5", num2: "3"},
-        	{lastName: "Open", num1: "66", num2: "6"},
-        	{lastName: "Dewit", num1: "4",num2: "3"},
-        	{lastName: "Zar", num1: "78",num2: "9"},
-        	{lastName: "Dewit", num1: "4",num2: "3"},
-        	{lastName: "Zar", num1: "78",num2: "9"},
-        	{lastName: "Dewit", num1: "4",num2: "3"},
-        	{lastName: "Zar", num1: "78",num2: "9"},
-        	{lastName: "Dewit", num1: "4",num2: "3"},
-        	{lastName: "Zar", num1: "78",num2: "9"},
-        	{lastName: "Dewit", num1: "4",num2: "3"},
-        	{lastName: "Zar", num1: "78",num2: "9"},
-        	{lastName: "Turner", num1: "9", num2: "3"}
-        ];
-        
-        //Create an instance of the table control
-        var oTable = new sap.ui.table.Table({
-        	title: obj.deptName+" "+obj.num,
-        	visibleRowCount: 10
-        });
-        //Define the columns and the control templates to be used
-        var oColumn = new sap.ui.table.Column({
-        	label: new sap.ui.commons.Label({text: "岗位名称"}),
-        	template: new sap.ui.commons.TextView().bindProperty("text", "lastName"),
-        	width: "15px"
-        });
-
-        oTable.addColumn(oColumn);
-        oTable.addColumn(new sap.ui.table.Column({
-        	label: new sap.ui.commons.Label({text: "职位"}),
-        	template: new sap.ui.commons.TextField().bindProperty("value", "num1"),
-        	width: "12px"
-        }));
-        oTable.addColumn(new sap.ui.table.Column({
-        	label: new sap.ui.commons.Label({text: "岗级"}),
-        	template: new sap.ui.commons.TextField().bindProperty("value", "num2"),
-        	width: "12px"
-        }));
-        
-        //Create a model and bind the table rows to this model
-        var oModel = new sap.ui.model.json.JSONModel();
-        // if(divIndex===1){
-        //   aData=  [
-        // 	{lastName: "Dente", num1: "21", num2: "6"},
-        // 	{lastName: "Zar", num1: "78",num2: "9"},
-        // 	{lastName: "Dewit", num1: "4",num2: "3"},
-        // 	{lastName: "Zar", num1: "78",num2: "9"},
-        // 	{lastName: "Dewit", num1: "4",num2: "3"},
-        // 	{lastName: "Zar", num1: "78",num2: "9"},
-        // 	{lastName: "Dewit", num1: "4",num2: "3"},
-        // 	{lastName: "Turner", num1: "24", num2: "4"}
-        // ];
-        // }
-        oModel.setData({modelData: aData});
-        oTable.setModel(oModel);
-        oTable.bindRows("/modelData");
-        oTable.placeAt("com_content_table_"+divIndex);
 	}
 
 });
