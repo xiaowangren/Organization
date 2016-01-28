@@ -67,45 +67,92 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         oInput0.placeAt("textFieldForm0");
         var oInput1 = new sap.ui.commons.TextField('input1',{enabled:false});
         oInput1.placeAt("textFieldForm");
+                var oButton1 = new sap.ui.commons.Button({
+            	text : "选择组织单元",
+            	press : function() {
+            	    var oInput0 = sap.ui.getCore().byId("input0");  
+            	    var oInput1 = sap.ui.getCore().byId("input1");  
+            	    var oDialog1 = new sap.ui.commons.Dialog();  // Dialog弹出窗
+            	    oDialog1.setWidth("500px");
+                	oDialog1.setTitle("选择组织单元");
+                	var oTreeTable = new sap.ui.table.TreeTable({   //  TreeTable
+                         columns : [ 
+                         new sap.ui.table.Column({  
+                         label : "Name", 
+                         template : "Name"  
+                         })],  
+                         selectionMode : sap.ui.table.SelectionMode.Single,  
+                         enableColumnReordering : true, 
+                         cellClick:function(oEvent){      // Click 事件
+                             var sPath = oEvent.getParameters().cellControl.mBindingInfos.text.binding.oContext.sPath;
+                             var sPats = sPath.split("'");
+                             var text = oEvent.getParameters().cellControl.mProperties.text;
+                             oInput0.setValue(sPats[1]);
+                             oInput1.setValue(text);
+                             oDialog1.close();
+                         }
+                    }); 
+                    oTreeTable.setColumnHeaderVisible(false);
+                    var sServiceUrl = "/sap/opu/odata/sap/ZBILLYTREETABLE01_SRV/";//  /sap/opu/odata/sap/ZBILLYTREETABLE01_SRV/
+                    ///sap/opu/odata/SAP/ZHRMAP_SRV/
+                    var oModel = new sap.ui.model.odata.v2.ODataModel(sServiceUrl, { useBatch : true });
+                    oTreeTable.setModel(oModel);  
+                     //annotation service binding  
+                     oTreeTable.bindRows({  
+                     path : "/OM_ORG_TREE_SET",  
+                     parameters : {  
+                     countMode: "Inline",  
+                     numberOfExpandedLevels : 0  
+                     }  
+                     });
+                	
+                	
+                	oDialog1.addContent(oTreeTable);
+                	oDialog1.open();
+            	    
+            	}
+            });
+             oButton1.placeAt("zuZhiDanYanBianMaForm");
+             
 	    //Create a MenuButton Control
-        var oMenuButton = new sap.ui.commons.MenuButton("menuButton",{text: "选择组织单元"}); 
-        //Create the menu
-        var oMenu1 = new sap.ui.commons.Menu();
-        //Create the items and add them to the menu
-        var oMenuItem1 = new sap.ui.commons.MenuItem({text: "New",tooltip: "1001",select:this.handleMenuItemPress}); //Icon must be not larger than 16x16 px
-        oMenu1.addItem(oMenuItem1);
-        var oMenuItem2 = new sap.ui.commons.MenuItem({text: "Delete",tooltip: "1002",select:this.handleMenuItemPress});
-        oMenu1.addItem(oMenuItem2);
-        var oMenuItem3 = new sap.ui.commons.MenuItem({text: "Properties",tooltip: "1003",select:this.handleMenuItemPress});
-        oMenu1.addItem(oMenuItem3);
-        //Create a sub menu for item 1
-        var oMenu2 = new sap.ui.commons.Menu();
-        oMenuItem1.setSubmenu(oMenu2);
-        //Create the items and add them to the sub menu
-        var oMenuItem4 = new sap.ui.commons.MenuItem({text: "TXT",tooltip: "1004"});
-        oMenu2.addItem(oMenuItem4);
-        var oMenuItem5 = new sap.ui.commons.MenuItem({text: "RAR",tooltip: "1005"});
-        oMenu2.addItem(oMenuItem5);
+        // var oMenuButton = new sap.ui.commons.MenuButton("menuButton",{text: "选择组织单元"}); 
+        // //Create the menu
+        // var oMenu1 = new sap.ui.commons.Menu();
+        // //Create the items and add them to the menu
+        // var oMenuItem1 = new sap.ui.commons.MenuItem({text: "New",tooltip: "1001",select:this.handleMenuItemPress}); //Icon must be not larger than 16x16 px
+        // oMenu1.addItem(oMenuItem1);
+        // var oMenuItem2 = new sap.ui.commons.MenuItem({text: "Delete",tooltip: "1002",select:this.handleMenuItemPress});
+        // oMenu1.addItem(oMenuItem2);
+        // var oMenuItem3 = new sap.ui.commons.MenuItem({text: "Properties",tooltip: "1003",select:this.handleMenuItemPress});
+        // oMenu1.addItem(oMenuItem3);
+        // //Create a sub menu for item 1
+        // var oMenu2 = new sap.ui.commons.Menu();
+        // oMenuItem1.setSubmenu(oMenu2);
+        // //Create the items and add them to the sub menu
+        // var oMenuItem4 = new sap.ui.commons.MenuItem({text: "TXT",tooltip: "1004"});
+        // oMenu2.addItem(oMenuItem4);
+        // var oMenuItem5 = new sap.ui.commons.MenuItem({text: "RAR",tooltip: "1005"});
+        // oMenu2.addItem(oMenuItem5);
         
-        //Create a sub menu for item 1
-        var oMenu3 = new sap.ui.commons.Menu();
-        oMenuItem2.setSubmenu(oMenu3);
-        //Create the items and add them to the sub menu
-        var oMenuItem6 = new sap.ui.commons.MenuItem({text: "ABC"});
-        oMenu3.addItem(oMenuItem6);
-        var oMenuItem7 = new sap.ui.commons.MenuItem({text: "DEF"});
-        oMenu3.addItem(oMenuItem7);
+        // //Create a sub menu for item 1
+        // var oMenu3 = new sap.ui.commons.Menu();
+        // oMenuItem2.setSubmenu(oMenu3);
+        // //Create the items and add them to the sub menu
+        // var oMenuItem6 = new sap.ui.commons.MenuItem({text: "ABC"});
+        // oMenu3.addItem(oMenuItem6);
+        // var oMenuItem7 = new sap.ui.commons.MenuItem({text: "DEF"});
+        // oMenu3.addItem(oMenuItem7);
         
         
-        //Attach the Menu to the MenuButton
-        oMenuButton.setMenu(oMenu1);
-        //Attach an event to raise an alert when an item is selected.
-        // oMenuButton.attachItemSelected(function (oEvent){
-        //     sap.ui.getCore().byId("input1").setValue(oEvent.getParameter("item").getText() );
-        // });
+        // //Attach the Menu to the MenuButton
+        // oMenuButton.setMenu(oMenu1);
+        // //Attach an event to raise an alert when an item is selected.
+        // // oMenuButton.attachItemSelected(function (oEvent){
+        // //     sap.ui.getCore().byId("input1").setValue(oEvent.getParameter("item").getText() );
+        // // });
         
-        //Attach the MenuButton to the page
-        oMenuButton.placeAt("zuZhiDanYanBianMaForm");
+        // //Attach the MenuButton to the page
+        // oMenuButton.placeAt("zuZhiDanYanBianMaForm");
 	},
 	handleMenuItemPress:function(oEvent){
 	     sap.ui.getCore().byId("input0").setValue(oEvent.getParameter("item").getTooltip());
