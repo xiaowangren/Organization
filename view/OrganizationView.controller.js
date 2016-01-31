@@ -22,10 +22,10 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         console.log(divIndex2+"+++"+obj);
         if(divIndex2!=9999){
             var standardListItem = new sap.m.StandardListItem({title:obj.name});
-            standardListItem.placeAt("com_content_table_"+divIndex+"_"+divIndex2);
+            standardListItem.placeAt("com_content_table_"+divIndex+"_"+divIndex2,"only");
         }else{
             var standardListItem = new sap.m.StandardListItem({title:obj.name});
-            standardListItem.placeAt("com_content_table_"+divIndex);
+            standardListItem.placeAt("com_content_table_"+divIndex,"only");
         }
         
         // sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
@@ -93,7 +93,7 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                          }
                     }); 
                     oTreeTable.setColumnHeaderVisible(false);
-                    var sServiceUrl = "/sap/opu/odata/sap/ZBILLYTREETABLE01_SRV/";//  /sap/opu/odata/sap/ZBILLYTREETABLE01_SRV/
+                    var sServiceUrl = "/sap/opu/odata/SAP/ZHRMAP_SRV/";//  /sap/opu/odata/sap/ZBILLYTREETABLE01_SRV/
                     ///sap/opu/odata/SAP/ZHRMAP_SRV/
                     var oModel = new sap.ui.model.odata.v2.ODataModel(sServiceUrl, { useBatch : true });
                     oTreeTable.setModel(oModel);  
