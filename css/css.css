@@ -22,3 +22,9 @@ html,body{height:100%;overflow-y:hidden;margin:0;padding:0;}
 .sapUiTableColRowHdrIco{height: 0px;width: 0px;}
 .sapUiTableRSel .sapUiTableColHdrScr, .sapUiTableRSel .sapUiTableColHdrFixed, .sapUiTableRSel .sapUiTableCtrlScr, .sapUiTableRSel .sapUiTableCtrlScrFixed{margin-right:0px; margin-left: 0px;}
 .sapUiTableCol .sapUiLbl, .sapUiTableCell>.sapUiTf, .sapUiTableCell>.sapUiSearchField, .sapUiTableCell>.sapUiSearchField>.sapUiTfCombo, .sapUiTableCell>.sapUiTfCombo{margin-left: -5px;width: 150%;}
+
+.sapMSLITitleOnly {
+    font-size: 0.8rem;
+    color: #333333;
+    white-space: normal;
+}
