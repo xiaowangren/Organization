@@ -112,47 +112,7 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
             	    
             	}
             });
-             oButton1.placeAt("zuZhiDanYanBianMaForm");
-             
-	    //Create a MenuButton Control
-        // var oMenuButton = new sap.ui.commons.MenuButton("menuButton",{text: "选择组织单元"}); 
-        // //Create the menu
-        // var oMenu1 = new sap.ui.commons.Menu();
-        // //Create the items and add them to the menu
-        // var oMenuItem1 = new sap.ui.commons.MenuItem({text: "New",tooltip: "1001",select:this.handleMenuItemPress}); //Icon must be not larger than 16x16 px
-        // oMenu1.addItem(oMenuItem1);
-        // var oMenuItem2 = new sap.ui.commons.MenuItem({text: "Delete",tooltip: "1002",select:this.handleMenuItemPress});
-        // oMenu1.addItem(oMenuItem2);
-        // var oMenuItem3 = new sap.ui.commons.MenuItem({text: "Properties",tooltip: "1003",select:this.handleMenuItemPress});
-        // oMenu1.addItem(oMenuItem3);
-        // //Create a sub menu for item 1
-        // var oMenu2 = new sap.ui.commons.Menu();
-        // oMenuItem1.setSubmenu(oMenu2);
-        // //Create the items and add them to the sub menu
-        // var oMenuItem4 = new sap.ui.commons.MenuItem({text: "TXT",tooltip: "1004"});
-        // oMenu2.addItem(oMenuItem4);
-        // var oMenuItem5 = new sap.ui.commons.MenuItem({text: "RAR",tooltip: "1005"});
-        // oMenu2.addItem(oMenuItem5);
-        
-        // //Create a sub menu for item 1
-        // var oMenu3 = new sap.ui.commons.Menu();
-        // oMenuItem2.setSubmenu(oMenu3);
-        // //Create the items and add them to the sub menu
-        // var oMenuItem6 = new sap.ui.commons.MenuItem({text: "ABC"});
-        // oMenu3.addItem(oMenuItem6);
-        // var oMenuItem7 = new sap.ui.commons.MenuItem({text: "DEF"});
-        // oMenu3.addItem(oMenuItem7);
-        
-        
-        // //Attach the Menu to the MenuButton
-        // oMenuButton.setMenu(oMenu1);
-        // //Attach an event to raise an alert when an item is selected.
-        // // oMenuButton.attachItemSelected(function (oEvent){
-        // //     sap.ui.getCore().byId("input1").setValue(oEvent.getParameter("item").getText() );
-        // // });
-        
-        // //Attach the MenuButton to the page
-        // oMenuButton.placeAt("zuZhiDanYanBianMaForm");
+            oButton1.placeAt("zuZhiDanYanBianMaForm");
 	},
 	handleMenuItemPress:function(oEvent){
 	     sap.ui.getCore().byId("input0").setValue(oEvent.getParameter("item").getTooltip());
@@ -171,13 +131,11 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         	    var dateNew = year+month+day;
         	    var jiBie = sap.ui.getCore().byId("ComboBox1").getSelectedKey();
         	    var bianHao = sap.ui.getCore().byId("input0").getValue();
-        	    
-                var depArray = [
-                	{name:"总经理工作部",list:[{name:"二级部门"},{name:"三级部门"}]},
-                	{name:"人力资源部",list:[{name:"二级部门"},{name:"三级部门"}]},
-                	{name:"燃料部",list:[{name:"二级部门"},{name:"三级部门"}]}
-                ];
-                var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>公司领导</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
+
+                var depArrs = {name:"浙江浙能电力股份有限公司",list:[{name:"人力资源部",},{name:"安健环部",
+                                        list:[{name:"新组织单位",},],},{name:"计划发展部1",},{name:"证券部",},{name:"综合办上级",list:[{name:"公司领导",},{name:"新组织单位",},],},{name:"财务产权部",},{name:"生产安全部",},{name:"党群工作部",},{name:"审计部",},],};
+                var depArray =   depArrs.list;  
+                var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>'+depArrs.name+'</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
                 $('#htmlstrtpart').html(htmls);                
                 var num =20;
                 var len = depArray.length;
@@ -199,56 +157,44 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                 if(i==0){
                         var list = depArray[i].list;
                         html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div>';
-                        if(list!=undefined){
-                            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
-                            for(var k=0;k<list.length;k++){
-                                if(k==0){
-                                html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }else if(k==list.length-1){
-                                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }else{
-                                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }
-                            }
-                            html+='</div>';
-                        }
-                        
+                        // if(list!=undefined){
+                        //     html+='<div class="line-v"><span></span></div><div class="strt-block" >';
+                        //     for(var k=0;k<list.length;k++){
+                        //         if(k==0){
+                        //             html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                        //         }else if(k==list.length-1){
+                        //             html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                        //         }else{
+                        //             html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                        //         }
+                        //     }
+                        //     html+='</div>';
+                        // }
+                        html=this.onHtml(html, list,i);
                 }else if(i==depArray.length-1){
                         var list = depArray[i].list;
                         html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div>';
-                        if(list!=undefined){
-                            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
-                            for(var k=0;k<list.length;k++){
-                                if(k==0){
-                                html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }else if(k==list.length-1){
-                                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }else{
-                                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }
-                            }
-                            html+='</div>';
-                        }
+                        // if(list!=undefined){
+                        //     html+='<div class="line-v"><span></span></div><div class="strt-block" >';
+                        //     for(var k=0;k<list.length;k++){
+                        //         if(k==0){
+                        //             html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                        //         }else if(k==list.length-1){
+                        //                 html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                        //         }else{
+                        //                 html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                        //         }
+                        //     }
+                        //     html+='</div>';
+                        // }
+                        html=this.onHtml(html, list,i);
                     
                 }else{
                         // console.log("dddd");
                         var list = depArray[i].list;
                         html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'"></div>';
                         // console.log("dddd");
-                        if(list!=undefined){
-                            
-                            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
-                            for(var k=0;k<list.length;k++){
-                                if(k==0){
-                                html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }else if(k==list.length-1){
-                                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }else{
-                                        html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
-                                }
-                            }
-                            html+='</div>';
-                        }
+                        html=this.onHtml(html, list,i);
                     
                 }
                 html+='</div>';
@@ -263,6 +209,24 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                     }
                 }
         }
+	},
+	onHtml:function(html,list,i){
+	    if(list!=undefined){
+            html+='<div class="line-v"><span></span></div><div class="strt-block" >';
+                for(var k=0;k<list.length;k++){
+                    if(k==0&&list.length==1){
+                        html+='<div class="strt-part"><span class="line-h "></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                    }else if(k==0&&list.length>1){
+                        html+='<div class="strt-part"><span class="line-h line-h-r"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                    }else if(k==list.length-1){
+                        html+='<div class="strt-part"><span class="line-h line-h-l"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                    }else{
+                            html+='<div class="strt-part"><span class="line-h line-h-c"></span><div class="line-v"><span></span></div><div class="strt-name-div" id="com_content_table_'+i+'_'+k+'"></div></div>';
+                    }
+                }
+            html+='</div>';
+        }
+        return html;
 	}
 
 });
