@@ -29,7 +29,7 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         }
         
         // sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
-        var children = obj.list;
+        // var children = obj.list;
 
 	},
 	_drawDatePickers:function(){
@@ -67,11 +67,11 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         oInput0.placeAt("textFieldForm0");
         var oInput1 = new sap.ui.commons.TextField('input1',{enabled:false});
         oInput1.placeAt("textFieldForm");
-                var oButton1 = new sap.ui.commons.Button({
+        var oButton1 = new sap.ui.commons.Button({
             	text : "选择组织单元",
-            	press : function() {
+            	press : function(oEvent) {
             	    var oInput0 = sap.ui.getCore().byId("input0");  
-            	    var oInput1 = sap.ui.getCore().byId("input1");  
+            	    var oInput1 = sap.ui.getCore().byId("input1"); 
             	    var oDialog1 = new sap.ui.commons.Dialog();  // Dialog弹出窗
             	    oDialog1.setWidth("500px");
                 	oDialog1.setTitle("选择组织单元");
