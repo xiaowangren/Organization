@@ -132,7 +132,7 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         	    var dateNew = year+month+day;
         	    var jiBie = sap.ui.getCore().byId("ComboBox1").getSelectedKey();
         	    var bianHao = sap.ui.getCore().byId("input0").getValue();
-
+                console.log(jiBie+"  "+bianHao+"   "+dateNew);
 
                 //   配置服务器
 				var sServiceUrl = "/sap/opu/odata/SAP/ZHRMAP_SRV/";
@@ -195,7 +195,7 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                     sap.m.MessageToast.show("网络连接失败，请重试");
                 }, this);
                 dateId.setValue(dateValue);
-                oModel.read("/OM_ORGSTRU_SET/?$filter=Objid eq '"+bianHao+"'",mParameters);///sap/opu/odata/SAP/ZHRMAP_SRV/OM_ORGSTRU_SET?$filter=Objid eq '10003001'
+                oModel.read("/OM_ORGSTRU_SET/?$filter=Objid eq '"+bianHao+"' and Begda eq '"+dateNew+"' and ExpandLevel eq "+jiBie+"",mParameters);///sap/opu/odata/SAP/ZHRMAP_SRV/OM_ORGSTRU_SET?$filter=Objid eq '10003001'
                 //"/OM_ORGSTRU_SET/?$filter=Objid eq '"+bianHao+"' and Begda eq '"+dateNew+"'"
         	}
         });
