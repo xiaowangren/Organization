@@ -132,8 +132,6 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
         	    var dateNew = year+month+day;
         	    var jiBie = sap.ui.getCore().byId("ComboBox1").getSelectedKey();
         	    var bianHao = sap.ui.getCore().byId("input0").getValue();
-                console.log(jiBie+"  "+bianHao+"   "+dateNew);
-
                 //   配置服务器
 				var sServiceUrl = "/sap/opu/odata/SAP/ZHRMAP_SRV/";
                 var oModel = new sap.ui.model.odata.ODataModel(sServiceUrl, true);
@@ -143,49 +141,46 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                 mParameters['async'] = true;
                 mParameters['success'] = jQuery.proxy(function(data) {
                     var results = data.results;
-                    // console.log(results);
                     if(results.length>0){
                         var depArrs = eval('(' + results[0].Retstr + ')');
                         var depArray =   depArrs.list;//第二层
-                        var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>'+depArrs.name+'</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
-                        $('#htmlstrtpart').html(htmls);
-                        //第三层
-                        var num =25;
-                        var nums=0;
-                        var len=1;
-                        var count=0;
-                        if(depArray!=null){
-                            len =depArray.length;
-                            for(var i=0;i<depArray.length;i++){
-                                if(depArray[i].list!=null){
-                                    nums+=depArray[i].list.length;
-                                }else{
-                                    count++;
+                        if(depArray!=undefined){
+                            var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>'+depArrs.name+'</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
+                            $('#htmlstrtpart').html(htmls);
+                            //第三层
+                            var num =25;
+                            var nums=0;
+                            var len=1;
+                            var count=0;
+                            if(depArray!=null){
+                                len =depArray.length;
+                                for(var i=0;i<depArray.length;i++){
+                                    if(depArray[i].list!=null){
+                                        nums+=depArray[i].list.length;
+                                    }else{
+                                        count++;
+                                    }
                                 }
                             }
-                        }
-                        if(nums!=0){
-                          len=count+nums; 
-                        }
-                        num = num*len;
-                        if(num<100){
-                            num=100;
-                        }
-                        var sty = num+"%";
-                        // var num =40;
-                        // var len = depArray.length;
-                        // if(len>5){
-                        //     num = num* len;
-                        //     var sty = num+"%";
-                        document.getElementById('strt_block_table').style.width=sty;
-                        // }
-                        console.log(num);
-                        sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
-                        
+                            if(nums!=0){
+                              len=count+nums; 
+                            }
+                            num = num*len;
+                            if(num<100){
+                                num=100;
+                            }
+                            var sty = num+"%";
+                            document.getElementById('strt_block_table').style.width=sty;
+                            sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
+                        }else{
+                           $('#htmlstrtpart').empty(); 
+                           $("#strt_block_table").empty();
+                           sap.m.MessageToast.show("无数据显示"); 
+                        }    
                     }else{
                         $('#htmlstrtpart').empty(); 
                         $("#strt_block_table").empty();
-                        sap.m.MessageToast.show("无数据显示");
+                        sap.m.MessageToast.show("数据返回异常");
                     }
                     
                     
