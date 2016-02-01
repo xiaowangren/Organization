@@ -18,8 +18,6 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
        this._drawButton();
 	},
 	_drawTable:function(divIndex,divIndex2,obj){
-        //Create an instance of the table control
-        // console.log(divIndex2+"+++"+obj);
         if(divIndex2!=9999){
             var standardListItem = new sap.m.StandardListItem({title:obj.name});
             standardListItem.placeAt("com_content_table_"+divIndex+"_"+divIndex2,"only");
@@ -27,10 +25,6 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
             var standardListItem = new sap.m.StandardListItem({title:obj.name});
             standardListItem.placeAt("com_content_table_"+divIndex,"only");
         }
-        
-        // sap.ui.controller("com.zhenergy.organization.view.OrganizationView")._drawDiv(depArray,'#strt_block_table');
-        // var children = obj.list;
-
 	},
 	_drawDatePickers:function(){
 		// create DatePickers and bind to model
@@ -82,13 +76,16 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                          template : "Name"  
                          })],  
                          selectionMode : sap.ui.table.SelectionMode.Single,  
-                         enableColumnReordering : true, 
-                         cellClick:function(oEvent){      // Click 事件
-                             var sPath = oEvent.getParameters().cellControl.mBindingInfos.text.binding.oContext.sPath;
-                             var sPats = sPath.split("'");
-                             var text = oEvent.getParameters().cellControl.mProperties.text;
-                             oInput0.setValue(sPats[1]);
-                             oInput1.setValue(text);
+                         enableColumnReordering : true,
+                         selectionBehavior:sap.ui.table.SelectionBehavior.RowOnly,
+                         rowSelectionChange:function(oEvent){      // Click 事件
+                            //  var sPath = oEvent.getParameters().cellControl.mBindingInfos.text.binding.oContext.sPath;
+                            //  var sPats = sPath.split("'");
+                            //  var text = oEvent.getParameters().cellControl.mProperties.text;
+                             var sPath = oEvent.getParameters().rowContext.sPath;
+                             var data  = oModel.getProperty(sPath);
+                             oInput0.setValue(data.Id);
+                             oInput1.setValue(data.Name);
                              oDialog1.close();
                          }
                     }); 
@@ -145,8 +142,10 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                         var depArrs = eval('(' + results[0].Retstr + ')');
                         var depArray =   depArrs.list;//第二层
                         if(depArray!=undefined){
-                            var htmls = '<div class="strt-name-div" style="margin-top: 7px;padding: 5px;"><span>'+depArrs.name+'</span><span style="padding-left:20px" id="com_content_title"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
+                            var htmls = '<div class="" style="display:inline-block;width: 150px;margin-top: 7px;padding: 5px;"><span id="nameHead"></span></div><div class="line-v" ><span></span></div><div class="strt-block" id="strt_block_table" ><div style="clear:both;"></div></div>';
                             $('#htmlstrtpart').html(htmls);
+                            var heads = new sap.m.StandardListItem({title:depArrs.name});
+                            heads.placeAt("nameHead","only");
                             //第三层
                             var num =25;
                             var nums=0;
@@ -190,6 +189,19 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                     sap.m.MessageToast.show("网络连接失败，请重试");
                 }, this);
                 dateId.setValue(dateValue);
+                if(dateValue==""){
+                    sap.m.MessageToast.show("查询日期必填");
+                    return;
+                }
+                if(jiBie==""){
+                    sap.m.MessageToast.show("输出级别必填");
+                    return;
+                }
+                if(bianHao==""){
+                    sap.m.MessageToast.show("组织单元必填");
+                    return;
+                }
+                
                 oModel.read("/OM_ORGSTRU_SET/?$filter=Objid eq '"+bianHao+"' and Begda eq '"+dateNew+"' and ExpandLevel eq "+jiBie+"",mParameters);///sap/opu/odata/SAP/ZHRMAP_SRV/OM_ORGSTRU_SET?$filter=Objid eq '10003001'
                 //"/OM_ORGSTRU_SET/?$filter=Objid eq '"+bianHao+"' and Begda eq '"+dateNew+"'"
         	}
