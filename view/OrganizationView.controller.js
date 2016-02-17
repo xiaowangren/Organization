@@ -227,7 +227,6 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
                 html=this.onHtml(html, list,i);
                 html+='</div>';
             }
-            // console.log(html);
         $(div).html(html);
         for(var j=0;j<depArray.length;j++){
                 this._drawTable(j,9999,depArray[j]);
