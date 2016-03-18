@@ -1,7 +1,8 @@
 body{font-size: smaller;font-family: 微软雅黑;position:relative;}
 .top_title{background-color: #BEEAE7;font-size: 22px;margin-top: 10px;padding-left: 20px;}
 html,body{height:100%;overflow-y:hidden;margin:0;padding:0;}
-.strt-wrap{width:95%;margin:10px;cursor:move;}
+/*.strt-wrap{width:95%;margin:10px;cursor:move;}*/
+.strt-wrap{position:static !important;width:95%;margin:10px;cursor:move;}
 .strt-part{text-align:center;float:left;position:relative;}
 .strt-part .line-v{position:relative;height:40px;width:100%;}
 .strt-part .line-v span{display:block;background:#ccc;position:absolute;top:0;font-size:0;line-height:1px;width:1px;height:40px;left:50%;}
