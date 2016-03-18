@@ -69,12 +69,20 @@ sap.ui.controller("com.zhenergy.organization.view.OrganizationView", {
             	    var oDialog1 = new sap.ui.commons.Dialog();  // Dialog弹出窗
             	    oDialog1.setWidth("500px");
                 	oDialog1.setTitle("选择组织单元");
+                	var Column0 = new sap.ui.table.Column({ label : "ID", 
+                	    template :new sap.ui.commons.TextView().bindProperty("text", "Id")
+                	});
+                	var Column = new sap.ui.table.Column({ label : "Name", 
+                	    template :new sap.ui.commons.TextView().bindProperty("text", "Name")
+                	});
                 	var oTreeTable = new sap.ui.table.TreeTable({   //  TreeTable
                          columns : [ 
-                         new sap.ui.table.Column({  
-                         label : "Name", 
-                         template : "Name"  
-                         })],  
+                            Column,Column0 
+                        //  new sap.ui.table.Column({  
+                        //  label : "Name", 
+                        //  template : "Name"  
+                        //  })
+                        ],  
                          selectionMode : sap.ui.table.SelectionMode.Single,  
                          enableColumnReordering : true,
                          selectionBehavior:sap.ui.table.SelectionBehavior.RowOnly,
